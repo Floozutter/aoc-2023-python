@@ -18,9 +18,10 @@ digit_values = (
 digit_pattern = "|".join(digit_values.keys())
 def part2(s: str) -> int:
     # re.findall can fail to find last because it searches for non-overlapping matches only
-    first = re.search(digit_pattern, s)[0]
-    last = re.search(f"(?s:.*)({digit_pattern})", s)[1]  # https://stackoverflow.com/a/33233868
-    return 10*digit_values[first] + digit_values[last]
+    first = re.search(digit_pattern, s)
+    last = re.search(f"(?s:.*)({digit_pattern})", s)  # https://stackoverflow.com/a/33233868
+    assert first is not None and last is not None
+    return 10*digit_values[first[0]] + digit_values[last[1]]
 
 print(sum(map(part1, lines)))
 print(sum(map(part2, lines)))
