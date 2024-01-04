@@ -1,4 +1,6 @@
 from collections import Counter
+from functools import reduce
+from operator import mul, or_
 from typing import Iterable, NamedTuple, Self
 
 class Game(NamedTuple):
@@ -21,3 +23,4 @@ with open(INPUTPATH) as ifile:
 games = tuple(map(Game.from_line, raw.strip().splitlines()))
 
 print(sum(g.id for g in games if all(h <= Counter(red=12, green=13, blue=14) for h in g.hands)))
+print(sum(reduce(mul, reduce(or_, g.hands).values()) for g in games))
