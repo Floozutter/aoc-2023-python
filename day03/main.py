@@ -1,32 +1,43 @@
-import itertools
+from collections import defaultdict
+from typing import NamedTuple
+
+class Number(NamedTuple):
+    value: int
+    leftmost: tuple[int, int]
+class Symbol(NamedTuple):
+    value: str
+    pos: tuple[int, int]
 
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
 with open(INPUTPATH) as ifile:
     raw = ifile.read()
 grid = tuple(raw.strip().split())
+h, w = len(grid), len(grid[0])
 
-def adjacents(i: int, j: int) -> tuple[tuple[int, int], ...]:
-    return (i-1,j-1), (i-1,j), (i-1,j+1), (i,j-1), (i,j+1), (i+1,j-1), (i+1,j+0), (i+1,j+1)
+number_adjacency: dict[Number, set[Symbol]] = {}
+for i in range(h):
+    j = 0
+    while j < w:
+        if grid[i][j].isdigit():
+            k = j
+            while k < w and grid[i][k].isdigit():
+                k += 1
+            number_adjacency[Number(int("".join(grid[i][p] for p in range(j, k))), (i, j))] = {
+                Symbol(grid[a][b], (a, b))
+                for a, b in (
+                    *((i-1, p) for p in range(j-1,k+1)),
+                    *((i+1, p) for p in range(j-1,k+1)),
+                    (i, j-1), (i, k)
+                )
+                if 0 <= a < h and 0 <= b < w and grid[a][b] != "." and not grid[a][b].isdigit()
+            }
+            j = k
+        j += 1
+print(sum(number.value for number, symbols in number_adjacency.items() if symbols))
 
-visited: set[tuple[int, int]] = set()
-def find_number(i: int, j: int) -> int | None:
-    def f(j: int, recur_left: bool, recur_right: bool) -> str:
-        if (i, j) in visited:
-            return ""
-        visited.add((i, j))
-        if 0 <= i < len(grid) and 0 <= j < len(grid[0]) and grid[i][j].isdigit():
-            l = f(j-1, True, False) if recur_left else ""
-            r = f(j+1, False, True) if recur_right else ""
-            return l + grid[i][j] + r
-        return ""
-    number = f(j, True, True)
-    return None if not number else int(number)
-
-parts = tuple(itertools.chain.from_iterable(
-    (n for n in (find_number(x, y) for x, y in adjacents(i, j)) if n is not None)
-    for i, row in enumerate(grid)
-    for j, c in enumerate(row)
-    if c != "." and not c.isdigit()
-))
-print(sum(parts))
+symbol_adjacency: dict[Symbol, set[Number]] = defaultdict(set)
+for n, symbols in number_adjacency.items():
+    for s in symbols:
+        symbol_adjacency[s].add(n)
+print(sum(x.value * y.value for x, y in filter(lambda s: len(s) == 2, symbol_adjacency.values())))
