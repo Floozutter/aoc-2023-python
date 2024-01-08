@@ -1,19 +1,16 @@
-from typing import NamedTuple, Self
-
-class Card(NamedTuple):
-    id: int
-    winners: frozenset[int]
-    numbers: frozenset[int]
-    @classmethod
-    def from_line(cls, line: str) -> Self:
-        head, tail = line.split(": ")
-        l, r = tail.split(" | ")
-        return cls(int(head[5:]), frozenset(map(int, l.split())), frozenset(map(int, r.split())))
-
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
 with open(INPUTPATH) as ifile:
     raw = ifile.read()
-cards = tuple(map(Card.from_line, raw.strip().splitlines()))
 
-print(sum(int(2 ** (len(c.winners & c.numbers) - 1)) for c in cards))
+wincounts = tuple(
+    len(set(l.split()) & set(r.split()))
+    for l, r in (line.split(": ")[1].split(" | ") for line in raw.strip().splitlines())
+)
+print(sum(int(2**(n-1)) for n in wincounts))
+
+scratchcards = [1 for i in range(len(wincounts))]
+for i, n in enumerate(wincounts):
+    for j in range(i+1, i+1+n):
+        scratchcards[j] += scratchcards[i]
+print(sum(scratchcards))
