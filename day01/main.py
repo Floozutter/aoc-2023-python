@@ -8,7 +8,7 @@ with open(INPUTPATH) as ifile:
 lines = raw.strip().split()
 
 def part1(s: str) -> int:
-    digits = "".join(c for c in s if c.isdigit())
+    digits = "".join(c for c in s if c.isdecimal())
     return 10*int(digits[0]) + int(digits[-1])
 
 digit_values = (

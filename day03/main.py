@@ -19,9 +19,9 @@ number_adjacency: dict[Number, set[Symbol]] = {}
 for i in range(h):
     j = 0
     while j < w:
-        if grid[i][j].isdigit():
+        if grid[i][j].isdecimal():
             k = j
-            while k < w and grid[i][k].isdigit():
+            while k < w and grid[i][k].isdecimal():
                 k += 1
             number_adjacency[Number(int("".join(grid[i][p] for p in range(j, k))), (i, j))] = {
                 Symbol(grid[a][b], (a, b))
@@ -30,7 +30,7 @@ for i in range(h):
                     *((i+1, p) for p in range(j-1,k+1)),
                     (i, j-1), (i, k)
                 )
-                if 0 <= a < h and 0 <= b < w and grid[a][b] != "." and not grid[a][b].isdigit()
+                if 0 <= a < h and 0 <= b < w and grid[a][b] != "." and not grid[a][b].isdecimal()
             }
             j = k
         j += 1
