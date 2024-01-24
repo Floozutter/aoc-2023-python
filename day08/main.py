@@ -1,21 +1,19 @@
+from math import lcm
+
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test1.txt"
 #INPUTPATH = "input-test2.txt"
 with open(INPUTPATH) as ifile:
     raw = ifile.read()
-instructions, tail = raw.strip().split("\n\n")
+head, tail = raw.strip().split("\n\n")
+instruction = lambda step: head[step % len(head)] == "R"
 network = {l: (r[1:4], r[-4:-1]) for l, r in (line.split(" = ") for line in tail.splitlines())}
 
-i = 0
-node = "AAA"
-while node != "ZZZ":
-    node = network[node][0 if instructions[i%len(instructions)] == "L" else 1]
-    i += 1
-print(i)
+def steps(start: str) -> int:
+    i, node = 0, start
+    while node[-1] != "Z":
+        i, node = i+1, network[node][instruction(i)]
+    return i
 
-j = 0
-nodes = tuple(n for n in network if n[-1] == "A")
-while any(n[-1] != "Z" for n in nodes):
-    nodes = tuple(network[n][0 if instructions[j%len(instructions)] == "L" else 1] for n in nodes)
-    j += 1
-print(j)
+print(steps("AAA"))
+print(lcm(*(steps(node) for node in network if node[-1] == "A")))
