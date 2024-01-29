@@ -2,49 +2,33 @@ INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
 with open(INPUTPATH) as ifile:
     raw = ifile.read()
-tiles = {(i, j): t for i, line in enumerate(raw.strip().splitlines()) for j, t in enumerate(line)}
-
-si, sj = next(p for p, t in tiles.items() if t == "S")
-connections = {
-    (i, j): (
-        ((i-1, j), (i+1, j)) if t == "|" else
-        ((i, j-1), (i, j+1)) if t == "-" else
-        ((i-1, j), (i, j+1)) if t == "L" else
-        ((i-1, j), (i, j-1)) if t == "J" else
-        ((i+1, j), (i, j-1)) if t == "7" else
-        ((i+1, j), (i, j+1)) if t == "F" else
-        ()
-    ) for (i, j), t in tiles.items()
-}
-connections[si, sj] = tuple(
-    p for p in ((si-1, sj), (si, sj-1), (si, sj+1), (si+1, sj))
-    if p in connections and (si, sj) in connections[p]
-)
-
-i = 0
-visited = {(si, sj)}
-frontier = frozenset(((si, sj),))
-while (frontier := frozenset(q for p in frontier for q in connections[p] if q not in visited)):
-    visited.update(frontier)
-    i += 1
-print(i)
-
-sa, sb = 3*si + 1, 3*sj + 1
 subtiles = {
-    (3*i + da, 3*j + db): st
-    for (i, j), t in tiles.items()
-    for da, subtilerow in enumerate(
-        ((0, 1, 0), (0, 1, 0), (0, 1, 0)) if t == "|" else
-        ((0, 0, 0), (1, 1, 1), (0, 0, 0)) if t == "-" else
-        ((0, 1, 0), (0, 1, 1), (0, 0, 0)) if t == "L" else
-        ((0, 1, 0), (1, 1, 0), (0, 0, 0)) if t == "J" else
-        ((0, 0, 0), (1, 1, 0), (0, 1, 0)) if t == "7" else
-        ((0, 0, 0), (0, 1, 1), (0, 1, 0)) if t == "F" else
-        ((0, 0, 0), (0, 2, 0), (0, 0, 0)) if t == "S" else
+    (3*a + di, 3*b + dj): st
+    for a, line in enumerate(raw.strip().splitlines()) for b, c in enumerate(line)
+    for di, subtilerow in enumerate(
+        ((0, 1, 0), (0, 1, 0), (0, 1, 0)) if c == "|" else
+        ((0, 0, 0), (1, 1, 1), (0, 0, 0)) if c == "-" else
+        ((0, 1, 0), (0, 1, 1), (0, 0, 0)) if c == "L" else
+        ((0, 1, 0), (1, 1, 0), (0, 0, 0)) if c == "J" else
+        ((0, 0, 0), (1, 1, 0), (0, 1, 0)) if c == "7" else
+        ((0, 0, 0), (0, 1, 1), (0, 1, 0)) if c == "F" else
+        ((0, 0, 0), (0, 2, 0), (0, 0, 0)) if c == "S" else
         ((0, 0, 0), (0, 0, 0), (0, 0, 0))
     )
-    for db, st in enumerate(subtilerow)
+    for dj, st in enumerate(subtilerow)
 }
-for da, db in ((-1, 0), (0, -1), (0, 1), (1, 0)):
-    if subtiles.get((sa + 2*da, sb + 2*db), 0):
-        subtiles[sa + da, sb + db] = 2
+
+si, sj = next(p for p, st in subtiles.items() if st == 2)
+for di, dj in ((-1, 0), (0, -1), (0, 1), (1, 0)):
+    subtiles[si + di, sj + dj] = subtiles.get((si + 2*di, sj + 2*dj), 0)
+
+visited = {(si, sj)}
+frontier = frozenset(((si, sj),))
+while (frontier := frozenset(
+    (i + di, j + dj)
+    for i, j in frontier for di, dj in ((-1, 0), (0, -1), (0, 1), (1, 0))
+    if subtiles.get((i + di, j + dj), 0) == 1
+)):
+    subtiles.update({p: 2 for p in frontier})
+    visited.update(frontier)
+print(len(visited)//6)
