@@ -28,3 +28,23 @@ while (frontier := frozenset(q for p in frontier for q in connections[p] if q no
     visited.update(frontier)
     i += 1
 print(i)
+
+sa, sb = 3*si + 1, 3*sj + 1
+subtiles = {
+    (3*i + da, 3*j + db): st
+    for (i, j), t in tiles.items()
+    for da, subtilerow in enumerate(
+        ((0, 1, 0), (0, 1, 0), (0, 1, 0)) if t == "|" else
+        ((0, 0, 0), (1, 1, 1), (0, 0, 0)) if t == "-" else
+        ((0, 1, 0), (0, 1, 1), (0, 0, 0)) if t == "L" else
+        ((0, 1, 0), (1, 1, 0), (0, 0, 0)) if t == "J" else
+        ((0, 0, 0), (1, 1, 0), (0, 1, 0)) if t == "7" else
+        ((0, 0, 0), (0, 1, 1), (0, 1, 0)) if t == "F" else
+        ((0, 0, 0), (0, 2, 0), (0, 0, 0)) if t == "S" else
+        ((0, 0, 0), (0, 0, 0), (0, 0, 0))
+    )
+    for db, st in enumerate(subtilerow)
+}
+for da, db in ((-1, 0), (0, -1), (0, 1), (1, 0)):
+    if subtiles.get((sa + 2*da, sb + 2*db), 0):
+        subtiles[sa + da, sb + db] = 2
