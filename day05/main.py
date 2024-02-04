@@ -8,16 +8,16 @@ class Interval(NamedTuple):
         return self.end - self.start
     def __and__(self, other: Self) -> Self:
         start, end = max(self.start, other.start), min(self.end, other.end)
-        return self.__class__(start, end) if start < end else self.__class__(0, 0)
+        return type(self)(start, end) if start < end else type(self)(0, 0)
     def __sub__(self, other: Self) -> tuple[()] | tuple[Self] | tuple[Self, Self]:
         if other.start <= self.start and self.end <= other.end:
             return ()
         elif other.start <= self.start < other.end:
-            return self.__class__(other.end, self.end),
+            return type(self)(other.end, self.end),
         elif other.start < self.end <= other.end:
-            return self.__class__(self.start, other.start),
+            return type(self)(self.start, other.start),
         elif self.start < other.start and other.end < self.end:
-            return self.__class__(self.start, other.start), self.__class__(other.end, self.end)
+            return type(self)(self.start, other.start), type(self)(other.end, self.end)
         else:
             return self,
 
