@@ -18,6 +18,8 @@ class Record(NamedTuple):
             )
             if tuple(len(g) for g in a.replace(".", " ").strip().split()) == self.groups:
                 yield a
+    def unfold(self) -> Self:
+        return type(self)("?".join(5*(self.pattern,)), 5*self.groups)
 
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
@@ -26,3 +28,4 @@ with open(INPUTPATH) as ifile:
 records = tuple(map(Record.from_line, raw.strip().splitlines()))
 
 print(sum(1 for r in records for a in r.arrangements()))
+print(sum(1 for r in records for a in r.unfold().arrangements()))
