@@ -1,7 +1,7 @@
 from collections import Counter
 from functools import reduce
 from operator import mul, or_
-from typing import Iterable, NamedTuple, Self
+from typing import NamedTuple, Self
 
 class Game(NamedTuple):
     id: int
