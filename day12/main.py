@@ -13,19 +13,21 @@ class Record(NamedTuple):
     @classmethod
     def from_ungrouped(cls, ungrouped: Iterable[int], sizes: Iterable[int]) -> Self:
         sign = lambda n: 1 if n > 0 else -1 if n < 0 else 0
-        return cls(tuple(sum(group) for _, group in groupby(ungrouped, sign)), tuple(sizes))
+        return cls(tuple(sum(values) for _, values in groupby(ungrouped, sign)), tuple(sizes))
     def unfold(self) -> Self:
-        u = (*self.groups, -1, *self.groups, -1, *self.groups, -1, *self.groups, -1, *self.groups)
-        return type(self).from_ungrouped(u, self.sizes*5)
+        g = self.groups
+        return type(self).from_ungrouped((*g, -1, *g, -1, *g, -1, *g, -1, *g), self.sizes*5)
 
 def arrangements(rec: Record) -> int:
-    """
-    unknown = next((b for b in rec.blocks if b < 0), None)
-    known_sizes = tuple(b for b in rec.blocks if b > 0)
-    if unknown is None or sum(known_sizes) >= rec.sizes:
+    i = next((i for i, g in enumerate(rec.groups) if g < 0), None)
+    known_sizes = tuple(g for g in rec.groups if g > 0)
+    if i is None or sum(known_sizes) >= sum(rec.sizes):
         return known_sizes == rec.sizes
-    """
-    return 0
+    head = rec.groups[:i]
+    tail = ((rec.groups[i]+1,) if rec.groups[i]+1 < 0 else ()) + rec.groups[i+1:]
+    a = arrangements(Record.from_ungrouped((*head, 0, *tail), rec.sizes))
+    b = arrangements(Record.from_ungrouped((*head, 1, *tail), rec.sizes))
+    return a + b
 
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
