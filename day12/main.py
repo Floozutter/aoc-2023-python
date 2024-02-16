@@ -34,15 +34,14 @@ class Record(NamedTuple):
 
 @cache
 def arrangements(rec: Record) -> int:
-    rec = rec.reduce()
     i = next((i for i, g in enumerate(rec.groups) if g < 0), None)
     known_sizes = tuple(g for g in rec.groups if g > 0)
     if i is None or sum(known_sizes) >= sum(rec.sizes):
         return known_sizes == rec.sizes
     head = rec.groups[:i]
     tail = ((rec.groups[i]+1,) if rec.groups[i]+1 < 0 else ()) + rec.groups[i+1:]
-    a = arrangements(Record((*head, 0, *tail), rec.sizes))
-    b = arrangements(Record((*head, 1, *tail), rec.sizes))
+    a = arrangements(Record((*head, 0, *tail), rec.sizes).reduce())
+    b = arrangements(Record((*head, 1, *tail), rec.sizes).reduce())
     return a + b
 
 INPUTPATH = "input.txt"
@@ -51,5 +50,5 @@ with open(INPUTPATH) as ifile:
     raw = ifile.read()
 records = tuple(map(Record.from_line, raw.strip().splitlines()))
 
-print(sum(arrangements(r) for r in records))
-print(sum(arrangements(r.unfold()) for r in records))
+print(sum(arrangements(r.reduce()) for r in records))
+print(sum(arrangements(r.unfold().reduce()) for r in records))
