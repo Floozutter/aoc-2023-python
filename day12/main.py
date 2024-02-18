@@ -33,15 +33,15 @@ class Record(NamedTuple):
         return type(self)((*g, -1, *g, -1, *g, -1, *g, -1, *g), self.sizes*5)
 
 @cache
-def arrangements(rec: Record) -> int:
-    i = next((i for i, g in enumerate(rec.groups) if g < 0), None)
-    known_sizes = tuple(g for g in rec.groups if g > 0)
-    if i is None or sum(known_sizes) >= sum(rec.sizes):
-        return known_sizes == rec.sizes
-    head = rec.groups[:i]
-    tail = ((rec.groups[i]+1,) if rec.groups[i]+1 < 0 else ()) + rec.groups[i+1:]
-    a = arrangements(Record((*head, 0, *tail), rec.sizes).reduce())
-    b = arrangements(Record((*head, 1, *tail), rec.sizes).reduce())
+def arrangements(reduced: Record) -> int:
+    i = next((i for i, g in enumerate(reduced.groups) if g < 0), None)
+    known_sizes = tuple(g for g in reduced.groups if g > 0)
+    if i is None or sum(known_sizes) >= sum(reduced.sizes):
+        return known_sizes == reduced.sizes
+    head = reduced.groups[:i]
+    tail = ((reduced.groups[i]+1,) if reduced.groups[i]+1 < 0 else ()) + reduced.groups[i+1:]
+    a = arrangements(Record((*head, 0, *tail), reduced.sizes).reduce())
+    b = arrangements(Record((*head, 1, *tail), reduced.sizes).reduce())
     return a + b
 
 INPUTPATH = "input.txt"
