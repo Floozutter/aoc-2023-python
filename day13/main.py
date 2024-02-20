@@ -1,5 +1,3 @@
-from typing import NamedTuple, Self
-
 def horizontal_reflection(rows: tuple[tuple[bool, ...], ...]) -> None | int:
     for i in range(len(rows) - 1):
         if False:
