@@ -1,6 +1,6 @@
 def horizontal_reflection(rows: tuple[tuple[bool, ...], ...]) -> None | int:
     for i in range(len(rows) - 1):
-        if False:
+        if all(rows[i-n] == rows[i+1+n] for n in range(min(i+1, len(rows)-i-1))):
             return i
     return None
 
