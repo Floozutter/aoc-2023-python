@@ -1,3 +1,15 @@
+from typing import NamedTuple, Sequence
+
+class Reflection(NamedTuple):
+    score: int
+    idx: int
+    horizontal: bool
+
+def reflections(rows: Sequence[Sequence[bool]]) -> Sequence[Reflection]:
+    def row_reflections(rows: Sequence[Sequence[bool]], horizontal: bool) -> Sequence[Reflection]:
+        return ()
+    return ()
+
 def horizontal_reflection(rows: tuple[tuple[bool, ...], ...]) -> None | int:
     for i in range(len(rows) - 1):
         if all(rows[i-n] == rows[i+1+n] for n in range(min(i+1, len(rows)-i-1))):
