@@ -1,36 +1,31 @@
-from typing import NamedTuple, Sequence
+from typing import Iterator, NamedTuple, Sequence
 
 class Reflection(NamedTuple):
-    score: int
-    idx: int
-    vertical: bool
+    diff: int
+    i: int
+    vert: bool
 
-def reflections(rows: Sequence[Sequence[bool]]) -> Sequence[Reflection]:
-    def row_reflections(rows: Sequence[Sequence[bool]], vertical: bool) -> Sequence[Reflection]:
-        return ()
-    return ()
-
-def horizontal_reflection(rows: tuple[tuple[bool, ...], ...]) -> None | int:
-    for i in range(len(rows) - 1):
-        if all(rows[i-n] == rows[i+1+n] for n in range(min(i+1, len(rows)-i-1))):
-            return i
-    return None
-
-def summarize(rows: tuple[tuple[bool, ...], ...]) -> int:
-    if (horizontal := horizontal_reflection(rows)) is not None:
-        return 100 * (horizontal + 1)
+def ordered_reflections(rows: Sequence[Sequence[bool]]) -> Sequence[Reflection]:
+    def row_reflections(rows: Sequence[Sequence[bool]], vert: bool) -> Iterator[Reflection]:
+        for i in range(len(rows)-1):
+            diff = sum(
+                sum(a != b for a, b in zip(rows[i-n], rows[i+1+n]))
+                for n in range(min(i+1, len(rows)-i-1))
+            )
+            yield Reflection(diff, i, vert)
     transposed = tuple(tuple(column) for column in zip(*rows))
-    if (vertical := horizontal_reflection(transposed)) is not None:
-        return vertical + 1
-    raise ValueError
+    reflections = (*row_reflections(rows, False), *row_reflections(transposed, True))
+    return tuple(sorted(reflections))
 
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
 with open(INPUTPATH) as ifile:
     raw = ifile.read()
-patterns = tuple(
-    tuple(tuple(c == "#" for c in line) for line in section.splitlines())
+orderings = tuple(
+    ordered_reflections(tuple(tuple(c == "#" for c in line) for line in section.splitlines()))
     for section in raw.strip().split("\n\n")
 )
 
-print(sum(map(summarize, patterns)))
+firsts, seconds = zip(*((first, second) for first, second, *_ in orderings))
+print(sum(r.i+1 if r.vert else 100*(r.i+1) for r in firsts))
+print(sum(r.i+1 if r.vert else 100*(r.i+1) for r in seconds))
