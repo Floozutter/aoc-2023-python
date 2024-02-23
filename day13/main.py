@@ -3,10 +3,10 @@ from typing import NamedTuple, Sequence
 class Reflection(NamedTuple):
     score: int
     idx: int
-    horizontal: bool
+    vertical: bool
 
 def reflections(rows: Sequence[Sequence[bool]]) -> Sequence[Reflection]:
-    def row_reflections(rows: Sequence[Sequence[bool]], horizontal: bool) -> Sequence[Reflection]:
+    def row_reflections(rows: Sequence[Sequence[bool]], vertical: bool) -> Sequence[Reflection]:
         return ()
     return ()
 
