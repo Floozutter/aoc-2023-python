@@ -1,3 +1,11 @@
+from typing import NamedTuple, Self
+
+class Beam(NamedTuple):
+    i: int; j: int
+    di: int; dj: int
+    def step(self, tile: str) -> tuple[Self, ...]:
+        return ()
+
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
 with open(INPUTPATH) as ifile:
