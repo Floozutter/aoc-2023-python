@@ -4,7 +4,11 @@ class Beam(NamedTuple):
     i: int; j: int
     di: int; dj: int
     def step(self, tile: str) -> tuple[Self, ...]:
-        return ()
+        i, j, di, dj = self
+        if tile != ".":
+            return ()
+        else:
+            return (type(self)(i+di, j+dj, di, dj),)
 
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
