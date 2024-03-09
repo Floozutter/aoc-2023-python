@@ -9,6 +9,10 @@ class Beam(NamedTuple):
             return (type(self)(i, j-1, 0, -1), type(self)(i, j+1, 0, 1))
         elif tile == "|" and dj:
             return (type(self)(i-1, j, -1, 0), type(self)(i+1, j, 1, 0))
+        elif tile == "/":
+            return (type(self)(i-dj, j-di, -dj, -di),)
+        elif tile == "\\":
+            return (type(self)(i+dj, j+di, dj, di),)
         else:
             return (type(self)(i+di, j+dj, di, dj),)
 
