@@ -5,8 +5,10 @@ class Beam(NamedTuple):
     di: int; dj: int
     def step(self, tile: str) -> tuple[Self, ...]:
         i, j, di, dj = self
-        if tile != ".":
-            return ()
+        if tile == "-" and di:
+            return (type(self)(i, j-1, 0, -1), type(self)(i, j+1, 0, 1))
+        elif tile == "|" and dj:
+            return (type(self)(i-1, j, -1, 0), type(self)(i+1, j, 1, 0))
         else:
             return (type(self)(i+di, j+dj, di, dj),)
 
