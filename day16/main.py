@@ -34,3 +34,8 @@ with open(INPUTPATH) as ifile:
 grid = {(i, j): c for i, line in enumerate(raw.strip().splitlines()) for j, c in enumerate(line)}
 
 print(energized(grid, Beam(0, 0, 0, 1)))
+print(max(
+    energized(grid, Beam(i, j, di, dj))
+    for i, j in grid for di, dj in ((1, 0), (0, 1), (-1, 0), (0, -1))
+    if (i-di, j-dj) not in grid
+))
