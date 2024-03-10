@@ -4,7 +4,7 @@ class Beam(NamedTuple):
     i: int; j: int
     di: int; dj: int
     def step(self, tile: str) -> tuple[Self, ...]:
-        i, j, di, dj = self
+        i, j, di, dj = self.i, self.j, self.di, self.dj
         if tile == "-" and di:
             return (type(self)(i, j-1, 0, -1), type(self)(i, j+1, 0, 1))
         elif tile == "|" and dj:
