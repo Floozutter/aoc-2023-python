@@ -12,8 +12,17 @@ class Dig(NamedTuple):
             *(int(r[i+2:i+4], 16) for i in (0, 2, 4))
         )
 
+def range_to(z: int) -> range:
+    return range(0, z+1 if z >= 0 else z-1, 1 if z >= 0 else -1)
+
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
 with open(INPUTPATH) as ifile:
     raw = ifile.read()
 plan = tuple(map(Dig.from_line, raw.strip().splitlines()))
+
+trench = set(((0, 0),))
+i, j = 0, 0
+for dig in plan:
+    trench.update((i+di, j+dj) for di in range_to(dig.di) for dj in range_to(dig.dj))
+    i, j = i+dig.di, j+dig.dj
