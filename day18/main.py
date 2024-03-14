@@ -15,6 +15,9 @@ class Dig(NamedTuple):
 def range_to(z: int) -> range:
     return range(0, z+1 if z >= 0 else z-1, 1 if z >= 0 else -1)
 
+def contiguous_from(trench: set[tuple[int, int]], pos: tuple[int, int]) -> set[tuple[int, int]]:
+    return set()
+
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
 with open(INPUTPATH) as ifile:
@@ -26,3 +29,5 @@ i, j = 0, 0
 for dig in plan:
     trench.update((i+di, j+dj) for di in range_to(dig.di) for dj in range_to(dig.dj))
     i, j = i+dig.di, j+dig.dj
+
+
