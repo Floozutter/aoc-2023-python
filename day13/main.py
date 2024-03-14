@@ -1,4 +1,5 @@
-from typing import Iterator, NamedTuple, Sequence
+from collections.abc import Iterator, Sequence
+from typing import NamedTuple
 
 class Reflection(NamedTuple):
     diff: int

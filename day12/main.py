@@ -1,6 +1,7 @@
+from collections import Iterable
 from functools import cache
 from itertools import groupby
-from typing import Iterable, NamedTuple, Self
+from typing import NamedTuple, Self
 
 class Record(NamedTuple):
     groups: tuple[int, ...]

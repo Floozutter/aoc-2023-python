@@ -1,5 +1,6 @@
+from collections.abc import Iterable
 from functools import reduce
-from typing import Iterable, NamedTuple, Self
+from typing import NamedTuple, Self
 
 class Interval(NamedTuple):
     start: int
