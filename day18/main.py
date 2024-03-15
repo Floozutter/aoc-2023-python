@@ -21,6 +21,7 @@ with open(INPUTPATH) as ifile:
     raw = ifile.read()
 plan = tuple(map(Dig.from_line, raw.strip().splitlines()))
 
+vertices = [(0, 0)]
 trench = set(((0, 0),))
 i, j = 0, 0
 for dig in plan:
