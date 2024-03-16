@@ -21,9 +21,6 @@ with open(INPUTPATH) as ifile:
     raw = ifile.read()
 plan = tuple(map(Dig.from_line, raw.strip().splitlines()))
 
-vertices = [(0, 0)]
-trench = set(((0, 0),))
-i, j = 0, 0
+trench: list[tuple[int, int]] = []
 for dig in plan:
-    trench.update((i+di, j+dj) for di in range_to(dig.di) for dj in range_to(dig.dj))
-    i, j = i+dig.di, j+dig.dj
+    trench.append((trench[-1][0]+dig.di, trench[-1][1]+dig.dj) if trench else (dig.di, dig.dj))
