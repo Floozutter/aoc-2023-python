@@ -1,3 +1,8 @@
+from typing import NamedTuple
+
+class Part(NamedTuple):
+    x: int; m: int; a: int; s: int
+
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
 with open(INPUTPATH) as ifile:
