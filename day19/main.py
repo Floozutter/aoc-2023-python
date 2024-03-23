@@ -12,7 +12,4 @@ workflows = {
     l: tuple(r[:-1].split(","))
     for l, r in (line.split("{") for line in head.split())
 }
-parts = tuple(
-    {l: int(r) for l, r in (s.split("=") for s in line[1:-1].split(","))}
-    for line in tail.split()
-)
+parts = tuple(Part(s[s.index("=")+1:] for s in line[1:-1].split(","))) for line in tail.split())
