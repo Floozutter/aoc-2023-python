@@ -2,6 +2,8 @@ from typing import NamedTuple
 
 class Part(NamedTuple):
     x: int; m: int; a: int; s: int
+    def accepted_by(self, workflows: dict[str, tuple[str, ...]]) -> bool:
+        return False
 
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
