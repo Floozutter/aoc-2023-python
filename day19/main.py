@@ -15,3 +15,5 @@ parts = tuple(
     Part(*(int(s[s.index("=")+1:]) for s in line[1:-1].split(",")))
     for line in tail.split()
 )
+
+print(sum(sum(p) for p in parts if p.accepted_by(workflows)))
