@@ -1,3 +1,9 @@
+from typing import NamedTuple
+
+class Modu(NamedTuple):
+    typu: str
+    dest: tuple[str, ...]
+
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
 with open(INPUTPATH) as ifile:
