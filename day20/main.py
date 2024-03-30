@@ -2,6 +2,7 @@ from typing import NamedTuple
 
 class Modu(NamedTuple):
     typu: str
+    name: str
     dest: tuple[str, ...]
 
 INPUTPATH = "input.txt"
