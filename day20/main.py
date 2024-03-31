@@ -6,7 +6,8 @@ class Modu(NamedTuple):
     dest: tuple[str, ...]
     @classmethod
     def from_line(cls, line: str) -> Self:
-        return cls("", "", ())
+        l, r = line.split(" -> ")
+        return cls(l[0], l[1:], tuple(r.split(", ")))
 
 INPUTPATH = "input.txt"
 #INPUTPATH = "input-test.txt"
